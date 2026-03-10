@@ -1,106 +1,94 @@
+// 1. Sua Chave de API da OpenWeatherMap
+const apiKey = "189d11b2569e9dc749b6bd952cbdf02f";
 
-// AVISO IMPORTANTE: Cole sua API Key aqui dentro das aspas!
-const API_KEY = '189d11b2569e9dc749b6bd952cbdf02f';
+// Selecionando os elementos do HTML (DOM)
+const btnBuscar = document.getElementById('search-btn');
+const inputCidade = document.getElementById('city-input');
 
-// ==========================================
-// FASE 4: O "Pulo do Gato" (LocalStorage)
-// Dispara automaticamente quando a página carrega
-// ==========================================
+const campoCidade = document.getElementById('city-name');
+const campoTemperatura = document.getElementById('temperature');
+const campoDescricao = document.getElementById('description');
+const campoIcone = document.getElementById('weather-icon');
+const placeholderIcone = document.getElementById('icon-placeholder');
+
+/**
+ * FASE 4: O Pulo do Gato (LocalStorage)
+ * Esta função roda assim que a página é carregada.
+ * Ela verifica se existe algum clima salvo no navegador.
+ */
 window.onload = function() {
     const climaSalvo = localStorage.getItem('clima_salvo');
-    
-    // Se existir memória guardada, converte de volta pra Objeto e exibe sem requisição
+
     if (climaSalvo) {
-        const dadosSalvos = JSON.parse(climaSalvo);
-        exibirCardClima(dadosSalvos);
+        // Converte de texto (string) de volta para objeto
+        const dadosObjeto = JSON.parse(climaSalvo);
+        console.log("Recuperando clima da memória...");
+        exibirDados(dadosObjeto); // Mostra no HTML imediatamente
     }
 };
 
-// ==========================================
-// FASE 3: Conexão Global (Fetch)
-// ==========================================
+/**
+ * FASE 3: Conexão com a Rede Global (Fetch API)
+ * Busca os dados na API baseada no nome da cidade.
+ */
 function buscarClima() {
-    const inputCidade = document.getElementById('cidadeInput').value.trim();
-    const resultadoDiv = document.getElementById('resultado');
-    const erroDiv = document.getElementById('erro');
+    const cidade = inputCidade.value;
 
-    // Validação básica
-    if (inputCidade === "") {
-        mostrarErro("Por favor, digite o nome de uma cidade.");
+    if (cidade === "") {
+        alert("Por favor, digite o nome de uma cidade.");
         return;
     }
 
-    // Feedback visual e limpa mensagens de erro antigas
-    erroDiv.classList.add('hidden');
-    resultadoDiv.innerHTML = '<p style="margin-top: 20px; font-weight: bold; color: #666;">Buscando nos satélites... 🛰️</p>';
-    resultadoDiv.classList.remove('hidden');
-
-    // URL com as "Dicas de Ouro": units=metric (Celsius) e lang=pt_br (Português)
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputCidade}&appid=${API_KEY}&units=metric&lang=pt_br`;
+    // URL com parâmetros: units=metric (Celsius) e lang=pt_br (Português)
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${apiKey}&units=metric&lang=pt_br`;
 
     fetch(url)
-        .then(response => {
-            // Tratamento de Erro de Cidade Inventada (Ex: 404 Not Found)
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error("Cidade não encontrada. Verifique o nome e tente novamente.");
-                } else if (response.status === 401) {
-                    throw new Error("Chave de API inválida ou ainda não ativada (aguarde 15min se for nova).");
-                } else {
-                    throw new Error("Erro na comunicação com a API.");
-                }
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Cidade não encontrada");
             }
-            return response.json();
+            return res.json();
         })
         .then(dados => {
-            // FASE 4: Salvar com Sucesso (Memória)
+            // FASE 4: Salva o JSON no navegador transformando em string
             localStorage.setItem('clima_salvo', JSON.stringify(dados));
             
-            // Exibe os dados na tela
-            exibirCardClima(dados);
+            // Exibe na tela
+            exibirDados(dados);
         })
-        .catch(error => {
-            mostrarErro(error.message);
+        .catch(erro => {
+            alert(erro.message);
+            console.error("Erro na requisição: ", erro);
         });
 }
 
-// ==========================================
-// FUNÇÕES AUXILIARES DE DOM
-// ==========================================
-function exibirCardClima(dados) {
-    const resultadoDiv = document.getElementById('resultado');
-    const erroDiv = document.getElementById('erro');
+/**
+ * Injeta os dados no HTML (Manipulação de DOM)
+ */
+function exibirDados(dados) {
+    // Nome da cidade e país
+    campoCidade.innerHTML = `${dados.name}, ${dados.sys.country}`;
     
-    erroDiv.classList.add('hidden'); // Esconde erro, se houver
+    // Temperatura arredondada
+    campoTemperatura.innerHTML = `${Math.floor(dados.main.temp)}°C`;
     
-    // Extraindo dados do JSON
-    const nome = dados.name;
-    const pais = dados.sys.country;
-    const temp = Math.round(dados.main.temp); // Arredonda a temperatura
-    const descricao = dados.weather[0].description;
-    const iconeCodigo = dados.weather[0].icon;
-    
-    // URL dinâmica do Ícone Oficial da API
-    const iconeUrl = `https://openweathermap.org/img/wn/${iconeCodigo}@2x.png`;
+    // Descrição do clima
+    campoDescricao.innerHTML = dados.weather[0].description;
 
-    // Injeta o HTML estruturado
-    resultadoDiv.innerHTML = `
-        <div class="card-clima">
-            <div class="cidade-nome">${nome}, ${pais}</div>
-            <img class="icone" src="${iconeUrl}" alt="${descricao}">
-            <div class="temperatura">${temp}°C</div>
-            <div class="descricao">${descricao}</div>
-        </div>
-    `;
-    resultadoDiv.classList.remove('hidden');
+    // Lógica do Ícone (URL oficial da OpenWeatherMap)
+    const iconCode = dados.weather[0].icon;
+    campoIcone.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+    
+    // Mostra a imagem e esconde o ícone de carregamento/emoji
+    campoIcone.style.display = "inline-block";
+    placeholderIcone.style.display = "none";
 }
 
-function mostrarErro(mensagem) {
-    const resultadoDiv = document.getElementById('resultado');
-    const erroDiv = document.getElementById('erro');
-    
-    resultadoDiv.classList.add('hidden'); // Oculta o card
-    
-    erroDiv.innerHTML = `<div class="erro-container"><strong>Ops!</strong> ${mensagem}</div>`;
-    erroDiv.classList.remove('hidden');
-}
+// Eventos de interação
+btnBuscar.addEventListener('click', buscarClima);
+
+inputCidade.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        buscarClima();
+    }
+});
