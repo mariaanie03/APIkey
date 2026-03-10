@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previsão do Tempo 🌤️</title>
+    <!-- Link para o CSS -->
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>ClimaTempo App</h1>
+        
+        <!-- Campo de Pesquisa -->
+        <input type="text" id="cidadeInput" placeholder="Digite o nome da cidade..." autocomplete="off">
+        
+        <!-- Botão de Busca -->
+        <button onclick="buscarClima()">Buscar Cidade</button>
+        
+        <!-- Div para mostrar a Ficha de Clima -->
+        <div id="resultado" class="hidden"></div>
+
+        <!-- Div para exibir erros -->
+        <div id="erro" class="hidden"></div>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

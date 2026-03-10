@@ -1,0 +1,95 @@
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* Degradê azul suave para o tema de clima */
+    background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #334155;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 450px;
+    margin: 20px;
+}
+
+h1 {
+    color: #1e3a8a;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+/* INPUTS E BOTÕES */
+input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(to right, #2563eb, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+button:hover { background: linear-gradient(to right, #1d4ed8, #2563eb); transform: translateY(-2px); }
+button:active { transform: translateY(0); }
+
+/* CARD DE CLIMA */
+.card-clima {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 25px;
+    animation: fadeIn 0.5s ease-out;
+    text-align: center;
+}
+
+.cidade-nome { font-size: 1.6rem; font-weight: 800; color: #1e293b; margin-bottom: 5px; }
+.temperatura { font-size: 3.5rem; font-weight: bold; color: #3b82f6; margin: 5px 0; line-height: 1; }
+.descricao { font-size: 1.2rem; color: #64748b; text-transform: capitalize; font-weight: 500; }
+.icone { width: 100px; height: 100px; margin: 0 auto; display: block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));}
+
+/* UTILITÁRIOS E ERROS */
+.hidden { display: none; }
+
+.erro-container {
+    color: #ef4444; background: #fef2f2; border: 1px solid #fee2e2;
+    padding: 15px; border-radius: 10px; margin-top: 20px;
+    animation: fadeIn 0.4s ease-in; font-weight: 500;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
