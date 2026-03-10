@@ -93,3 +93,41 @@ button:active { transform: translateY(0); }
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+
+
+.historico-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn-historico {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-historico:hover {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+    transform: scale(1.05);
+}
+
+
+
+#btn-geo {
+    background: linear-gradient(to right, #10b981, #059669); /* Verde Esmeralda */
+    margin-top: 10px;
+}
+
+#btn-geo:hover {
+    background: linear-gradient(to right, #059669, #047857);
+}

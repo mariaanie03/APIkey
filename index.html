@@ -9,12 +9,19 @@
 </head>
 <body>
 
+    <!-- No seu index.html, adicione este botão: -->
+<button id="btn-geo" onclick="buscarPorLocalizacao()" style="background: linear-gradient(to right, #10b981, #059669); margin-top: 10px;">
+    📍 Usar Meu Local Atual
+</button>
+
     <div class="container">
         <h1>ClimaTempo App</h1>
         
         <!-- Campo de Pesquisa -->
         <input type="text" id="cidadeInput" placeholder="Digite o nome da cidade..." autocomplete="off">
         
+<div id="historico-container" class="historico-flex"></div>
+
         <!-- Botão de Busca -->
         <button onclick="buscarClima()">Buscar Cidade</button>
         
